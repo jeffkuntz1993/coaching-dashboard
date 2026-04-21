@@ -35,16 +35,26 @@ age_options = df['Age'].dropna().unique()
 team_options = df['Team Type'].dropna().unique()
 win_lose_options = df['Win vs Lose Preference'].dropna().unique()
 
+# --- NEW FILTERS ADDED HERE ---
+play_bench_options = df['Play vs Bench Preference'].dropna().unique()
+coaching_pref_options = df['Coaching Preference'].dropna().unique()
+
 # Create multi-select filters
 selected_age = st.sidebar.multiselect("Select Age Group(s)", options=age_options, default=age_options)
 selected_team = st.sidebar.multiselect("Select Team Type(s)", options=team_options, default=team_options)
 selected_win_lose = st.sidebar.multiselect("Love to Win or Hate to Lose?", options=win_lose_options, default=win_lose_options)
 
+# --- NEW MULTI-SELECTS ADDED HERE ---
+selected_play_bench = st.sidebar.multiselect("Play vs Bench Preference", options=play_bench_options, default=play_bench_options)
+selected_coaching = st.sidebar.multiselect("Coaching Preference", options=coaching_pref_options, default=coaching_pref_options)
+
 # Apply filters
 filtered_df = df[
     (df['Age'].isin(selected_age)) &
     (df['Team Type'].isin(selected_team)) &
-    (df['Win vs Lose Preference'].isin(selected_win_lose))
+    (df['Win vs Lose Preference'].isin(selected_win_lose)) &
+    (df['Play vs Bench Preference'].isin(selected_play_bench)) &      # <-- Added to filter logic
+    (df['Coaching Preference'].isin(selected_coaching))               # <-- Added to filter logic
 ]
 
 st.sidebar.markdown(f"**Current active responses:** {len(filtered_df)} out of {len(df)}")
