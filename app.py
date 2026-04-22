@@ -95,7 +95,7 @@ else:
         reason_cols = [col for col in df.columns if 'Read all five factors below' in col]
         if reason_cols and not filtered_df[reason_cols].dropna(how='all').empty:
             # Sort factors by best average rank (lowest number = best)
-            avg_ranks = filtered_df[reason_cols].mean().sort_values(descending=True)
+            avg_ranks = filtered_df[reason_cols].mean().sort_values(ascending=True)
             sorted_reasons = [x.split('[')[-1].replace(']', '') for x in avg_ranks.index]
             
             # Melt data for stacked charting
@@ -122,7 +122,7 @@ else:
         coach_cols = [col for col in df.columns if 'Once you have read the definitions above' in col]
         if coach_cols and not filtered_df[coach_cols].dropna(how='all').empty:
             # Sort factors by best average rank (lowest number = best)
-            avg_ranks_coach = filtered_df[coach_cols].mean().sort_values(descending=True)
+            avg_ranks_coach = filtered_df[coach_cols].mean().sort_values(ascending=True)
             sorted_coach = [x.split('[')[-1].replace(']', '') for x in avg_ranks_coach.index]
             
             # Melt data
@@ -147,8 +147,9 @@ else:
     
     negative_qualities_col = "Think about coaches you've had. What negative qualities did they possess?"
     positive_qualities_col = "Think of the BEST coach you've had. What qualities does he/she possess?"
+    other_qualities_col = "What are some qualities you want in a coach that you haven't already mentioned?"
     
-    tab1, tab2 = st.tabs(["Negative Qualities Experienced", "Best Coach Qualities"])
+    tab1, tab2, tab3 = st.tabs(["Negative Qualities Experienced", "Best Coach Qualities", "Other Desired Qualities"])
     
     with tab1:
         for idx, response in enumerate(filtered_df[negative_qualities_col].dropna()):
@@ -157,6 +158,10 @@ else:
     with tab2:
         for idx, response in enumerate(filtered_df[positive_qualities_col].dropna()):
             st.success(f'"{response}"')
+            
+    with tab3:
+        for idx, response in enumerate(filtered_df[other_qualities_col].dropna()):
+            st.warning(f'"{response}"')
 
 # Display raw data table option at the bottom
 if st.checkbox("Show Raw Data Table"):
