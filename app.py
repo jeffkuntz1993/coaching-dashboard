@@ -95,7 +95,7 @@ else:
         reason_cols = [col for col in df.columns if 'Read all five factors below' in col]
         if reason_cols and not filtered_df[reason_cols].dropna(how='all').empty:
             # Sort factors by best average rank (lowest number = best)
-            avg_ranks = filtered_df[reason_cols].mean().sort_values(ascending=True)
+            avg_ranks = filtered_df[reason_cols].mean().sort_values(descending=True)
             sorted_reasons = [x.split('[')[-1].replace(']', '') for x in avg_ranks.index]
             
             # Melt data for stacked charting
@@ -122,7 +122,7 @@ else:
         coach_cols = [col for col in df.columns if 'Once you have read the definitions above' in col]
         if coach_cols and not filtered_df[coach_cols].dropna(how='all').empty:
             # Sort factors by best average rank (lowest number = best)
-            avg_ranks_coach = filtered_df[coach_cols].mean().sort_values(ascending=True)
+            avg_ranks_coach = filtered_df[coach_cols].mean().sort_values(descending=True)
             sorted_coach = [x.split('[')[-1].replace(']', '') for x in avg_ranks_coach.index]
             
             # Melt data
