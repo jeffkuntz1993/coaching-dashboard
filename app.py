@@ -94,8 +94,8 @@ else:
         
         reason_cols = [col for col in df.columns if 'Read all five factors below' in col]
         if reason_cols and not filtered_df[reason_cols].dropna(how='all').empty:
-            # Sort factors by best average rank so the "most true" is at the top
-            avg_ranks = filtered_df[reason_cols].mean().sort_values(ascending=False)
+            # Sort factors by best average rank (lowest number = best)
+            avg_ranks = filtered_df[reason_cols].mean().sort_values(ascending=True)
             sorted_reasons = [x.split('[')[-1].replace(']', '') for x in avg_ranks.index]
             
             # Melt data for stacked charting
@@ -108,7 +108,10 @@ else:
             fig3 = px.bar(rank_counts, y='Reason', x='Count', color='Rank', orientation='h',
                           category_orders={"Reason": sorted_reasons, "Rank": ["1.0", "2.0", "3.0", "4.0", "5.0"]},
                           color_discrete_map=rank_5_colors)
-            fig3.update_layout(xaxis_title="Number of Votes", yaxis_title="", barmode='stack', legend_title="Rank")
+            
+            # Add autorange="reversed" so the first item in our list appears at the very top
+            fig3.update_layout(xaxis_title="Number of Votes", yaxis_title="", barmode='stack', legend_title="Rank",
+                               yaxis=dict(autorange="reversed"))
             st.plotly_chart(fig3, use_container_width=True)
 
     # Visual 4: Ideal Coach Qualities (Stacked Bar)
@@ -118,8 +121,8 @@ else:
         
         coach_cols = [col for col in df.columns if 'Once you have read the definitions above' in col]
         if coach_cols and not filtered_df[coach_cols].dropna(how='all').empty:
-            # Sort factors by best average rank
-            avg_ranks_coach = filtered_df[coach_cols].mean().sort_values(ascending=False)
+            # Sort factors by best average rank (lowest number = best)
+            avg_ranks_coach = filtered_df[coach_cols].mean().sort_values(ascending=True)
             sorted_coach = [x.split('[')[-1].replace(']', '') for x in avg_ranks_coach.index]
             
             # Melt data
@@ -132,7 +135,10 @@ else:
             fig4 = px.bar(rank_counts_coach, y='Quality', x='Count', color='Rank', orientation='h',
                           category_orders={"Quality": sorted_coach, "Rank": ["1.0", "2.0", "3.0", "4.0"]},
                           color_discrete_map=rank_4_colors)
-            fig4.update_layout(xaxis_title="Number of Votes", yaxis_title="", barmode='stack', legend_title="Rank")
+            
+            # Add autorange="reversed" so the first item in our list appears at the very top
+            fig4.update_layout(xaxis_title="Number of Votes", yaxis_title="", barmode='stack', legend_title="Rank",
+                               yaxis=dict(autorange="reversed"))
             st.plotly_chart(fig4, use_container_width=True)
 
     # Allow users to explore raw answers to free-text questions
